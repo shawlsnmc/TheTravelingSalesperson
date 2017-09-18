@@ -13,7 +13,7 @@ namespace TheTravelingSalesperson
         private string _firstName;
         private string _lastName;
         private string _accountID;
-        WidgetItemStock _widgetItem;
+        private WidgetItemStock _widgetItem;
         
         private List<string> _citiesVisited;
 
@@ -79,7 +79,7 @@ namespace TheTravelingSalesperson
         #region METHODS
         private void InitializeSalesperson()
         {
-            WidgetItem = new WidgetItemStock();
+            _widgetItem = new WidgetItemStock();
             _citiesVisited = new List<string>();
         }
 

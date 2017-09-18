@@ -111,8 +111,10 @@ namespace TheTravelingSalesperson
         public void DisplaySetupAccount()
         {
             bool gotInput = false;
+            
             int qty;
             string was = "";
+            string list = "";
 
             ConsoleUtil.HeaderText = "Account Setup";
             ConsoleUtil.DisplayReset();
@@ -150,23 +152,21 @@ namespace TheTravelingSalesperson
             {
                 was = $" (was set to: {_salesperson.WidgetItem.Type.ToString()})";
             }
-            while (!gotInput) {
-                ConsoleUtil.DisplayPromptMessage($"Enter widget type (Furry, Spotted, Dancing) {was}: ");
-                switch (Console.ReadLine().ToLower())
+
+            
+            foreach (WidgetItemStock.WidgetType type in Enum.GetValues(typeof(WidgetItemStock.WidgetType)))
+            {
+                if (type.ToString() != "None")
                 {
-                    case "furry":
-                        _salesperson.WidgetItem.Type = TheTravelingSalesperson.WidgetItemStock.WidgetType.Furry;
-                        gotInput = true;
-                        break;
-                    case "spotted":
-                        _salesperson.WidgetItem.Type = TheTravelingSalesperson.WidgetItemStock.WidgetType.Spotted;
-                        gotInput = true;
-                        break;
-                    case "dancing":
-                        _salesperson.WidgetItem.Type = TheTravelingSalesperson.WidgetItemStock.WidgetType.Dancing;
-                        gotInput = true;
-                        break;
+                    list = list + type.ToString() + ", ";
                 }
+            }
+            list = list.TrimEnd(' ', ',');
+            WidgetItemStock.WidgetType widget;
+            while (!gotInput) {
+                ConsoleUtil.DisplayPromptMessage($"Enter widget type ({list}) {was}: ");
+                gotInput = Enum.TryParse<WidgetItemStock.WidgetType>(Console.ReadLine(), true, out widget);
+                _salesperson.WidgetItem.Type = widget;
             }
 
             
@@ -178,6 +178,7 @@ namespace TheTravelingSalesperson
             }
 
             gotInput = false;
+            
             while (!gotInput)
             {
                 ConsoleUtil.DisplayPromptMessage($"Enter the current number of widgets in your stock{was}: ");
