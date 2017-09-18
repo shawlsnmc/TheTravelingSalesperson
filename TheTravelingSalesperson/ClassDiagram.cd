@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Comment CommentText="The Traveling Salesperson - Class Structure Example">
+    <Position X="3.633" Y="0.5" Height="0.317" Width="3.192" />
+  </Comment>
+  <Class Name="CodingActivity_TheTravelingSalesperson.Solution.ConsoleView">
+    <Position X="0.75" Y="1" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAgBAAAAAIAETAIAAAAAIAAAAAQAAAAEAAIAAAAAAAg=</HashCode>
+      <FileName>Views\ConsoleView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CodingActivity_TheTravelingSalesperson.Solution.Controller">
+    <Position X="4" Y="1" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAQAAAAAABAAAAAAQAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CodingActivity_TheTravelingSalesperson.Solution.Salesperson">
+    <Position X="4" Y="3.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAEAAAAAAAAAAAgEAABAAAAEAAAYAAAEAAAAAAAg=</HashCode>
+      <FileName>Models\Salesperson.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CodingActivity_TheTravelingSalesperson.Solution.WidgetItemStock">
+    <Position X="6.75" Y="1" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="CodingActivity_TheTravelingSalesperson.Solution.WidgetItemStock.WidgetType">
+        <TypeIdentifier>
+          <NewMemberFileName>Models\WidgetItemStock.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAQAAAAAAAgBAAAAAAAAAQgAAAAAAAA=</HashCode>
+      <FileName>Models\WidgetItemStock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="CodingActivity_TheTravelingSalesperson.Solution.MenuOption">
+    <Position X="0.75" Y="5.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAEAAAAQAAAgAAAAAAAAACAIAIAAAEAAAA=</HashCode>
+      <FileName>Models\MenuOption.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
