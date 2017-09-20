@@ -7,6 +7,7 @@ namespace TheTravelingSalesperson
 {
     /// <summary>
     /// console utility class
+    /// modified by sshawl
     /// </summary>
     public static class ConsoleUtil
     {
@@ -270,6 +271,22 @@ namespace TheTravelingSalesperson
             //newStr = Regex.Replace(newStr, "(?<=[A-Za-z])(?=[^A-Za-z])", " ");
 
             return newStr;
+        }
+
+        /// <summary>
+        /// Get user input and if they leave the input blank (just press enter) return the provided default value instead
+        /// </summary>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static string GetInputOrDefault(string defaultValue)
+        {
+            string value;
+            value = Console.ReadLine();
+            if (value is null || value == "")
+            {
+                value = defaultValue;
+            }
+            return value;
         }
     }
 }

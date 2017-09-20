@@ -81,8 +81,7 @@ namespace TheTravelingSalesperson
 
             System.Environment.Exit(1);
         }
-
-
+        
         /// <summary>
         /// display the welcome screen
         /// </summary>
@@ -101,12 +100,15 @@ namespace TheTravelingSalesperson
 
             DisplayContinuePrompt();
         }
-
+        
         /// <summary>
         /// setup the new salesperson object with the initial data
         /// Note: To maintain the pattern of only the Controller changing the data this method should
         ///       return a Salesperson object with the initial data to the controller. For simplicity in 
         ///       this demo, the ConsoleView object is allowed to access the Salesperson object's properties.
+        ///       
+        /// This method is also called when updating the account information, thus if the values are already set
+        /// you can simply press enter to keep the existing value.
         /// </summary>
         public void DisplaySetupAccount()
         {
@@ -120,6 +122,8 @@ namespace TheTravelingSalesperson
             ConsoleUtil.DisplayReset();
 
             ConsoleUtil.DisplayMessage("Setup your account now.");
+            ConsoleUtil.DisplayMessage("If the field already has a value, you will see a (was set to: valuehere).");
+            ConsoleUtil.DisplayMessage("To keep this value press enter.");
             Console.WriteLine();
 
 
@@ -129,7 +133,8 @@ namespace TheTravelingSalesperson
             }
 
             ConsoleUtil.DisplayPromptMessage($"Enter your first name{was}: ");
-            _salesperson.FirstName = Console.ReadLine();
+            
+            _salesperson.FirstName = ConsoleUtil.GetInputOrDefault(_salesperson.FirstName);
             Console.WriteLine();
 
             if (_salesperson.LastName != null)
@@ -137,7 +142,7 @@ namespace TheTravelingSalesperson
                 was = $" (was set to: {_salesperson.LastName})";
             }
             ConsoleUtil.DisplayPromptMessage($"Enter your last name{was}: ");
-            _salesperson.LastName = Console.ReadLine();
+            _salesperson.LastName = ConsoleUtil.GetInputOrDefault(_salesperson.LastName);
             Console.WriteLine();
 
             if (_salesperson.AccountID != null)
@@ -145,7 +150,7 @@ namespace TheTravelingSalesperson
                 was = $" (was set to: {_salesperson.AccountID})";
             }
             ConsoleUtil.DisplayPromptMessage($"Enter your account ID{was}: ");
-            _salesperson.AccountID = Console.ReadLine();
+            _salesperson.AccountID = ConsoleUtil.GetInputOrDefault(_salesperson.AccountID);
             Console.WriteLine();
 
             if (_salesperson.WidgetItem.Type.ToString() != "None")
@@ -165,17 +170,23 @@ namespace TheTravelingSalesperson
             WidgetItemStock.WidgetType widget;
             while (!gotInput) {
                 ConsoleUtil.DisplayPromptMessage($"Enter widget type ({list}) {was}: ");
-                gotInput = Enum.TryParse<WidgetItemStock.WidgetType>(Console.ReadLine(), true, out widget);
+                gotInput = Enum.TryParse<WidgetItemStock.WidgetType>(ConsoleUtil.GetInputOrDefault(_salesperson.WidgetItem.Type.ToString()), true, out widget);
+                if (widget == WidgetItemStock.WidgetType.None) 
+                {
+                    //sorry we don't employ sales people who don't sell stuff.
+                    gotInput = false;
+                }
                 _salesperson.WidgetItem.Type = widget;
             }
 
             
             Console.WriteLine();
 
-            if (_salesperson.WidgetItem.NumberOfUnits != 0)
-            {
+            // let's allow for a default of 0 for new sales people
+            //if (_salesperson.WidgetItem.NumberOfUnits != 0)
+            //{
                 was = $" (was set to: {_salesperson.WidgetItem.NumberOfUnits})";
-            }
+            //}
 
             gotInput = false;
             
@@ -188,7 +199,7 @@ namespace TheTravelingSalesperson
                     _salesperson.WidgetItem.SubtractWidgets(_salesperson.WidgetItem.NumberOfUnits);
                 }
 
-                if (Int32.TryParse(Console.ReadLine(), out qty)){
+                if (Int32.TryParse(ConsoleUtil.GetInputOrDefault(_salesperson.WidgetItem.NumberOfUnits.ToString()), out qty)){
                     _salesperson.WidgetItem.AddWidgets(qty);
                     gotInput = true;
                 }
@@ -196,10 +207,6 @@ namespace TheTravelingSalesperson
             }
    
             Console.WriteLine();
-
-            //
-            // TODO prompt the user to input all of the required account information
-            //
 
             DisplayContinuePrompt();
         }
@@ -302,6 +309,7 @@ namespace TheTravelingSalesperson
 
             return userMenuChoice;
         }
+
         /// <summary>
         /// get the next city to travel to from the user
         /// </summary>
@@ -312,7 +320,7 @@ namespace TheTravelingSalesperson
 
             ConsoleUtil.HeaderText = "Next City of Travel";
             ConsoleUtil.DisplayReset();
-            ConsoleUtil.DisplayPromptMessage("Enter the name of the city: ");
+            ConsoleUtil.DisplayPromptMessage("Enter the name of the city, leave blank and press enter to cancel: ");
             nextCity = Console.ReadLine();
 
 
@@ -333,9 +341,9 @@ namespace TheTravelingSalesperson
 
             while (!gotinput)
             {
-                ConsoleUtil.DisplayPromptMessage($"Enter the number of {_salesperson.WidgetItem.Type.ToString()} widgets to purchase: ");
+                ConsoleUtil.DisplayPromptMessage($"Enter the number of {_salesperson.WidgetItem.Type.ToString()} widgets to purchase, enter 0 to cancel: ");
                 gotinput = Int32.TryParse(Console.ReadLine(), out numberOfUnitsToAdd);
-                if (!(numberOfUnitsToAdd > 0))
+                if (!(numberOfUnitsToAdd >= 0))
                 {   //got bad input.
                     gotinput = false;
                     numberOfUnitsToAdd = 0;
@@ -354,18 +362,31 @@ namespace TheTravelingSalesperson
         {
             int numberOfUnitsToSell = 0;
             bool gotinput = false;
-
+            string userInput;
             ConsoleUtil.HeaderText = "Sell Inventory";
             ConsoleUtil.DisplayReset();
 
             while (!gotinput)
             {
-                ConsoleUtil.DisplayPromptMessage($"Enter the number of {_salesperson.WidgetItem.Type.ToString()} widgets to sell: ");
+                ConsoleUtil.DisplayMessage($"You currently have {_salesperson.WidgetItem.NumberOfUnits.ToString()} of the {_salesperson.WidgetItem.Type.ToString()} widgets in stock.");
+                ConsoleUtil.DisplayPromptMessage($"Enter the number of widgets to sell, enter 0 to cancel sale: ");
                 gotinput = Int32.TryParse(Console.ReadLine(), out numberOfUnitsToSell);
-                if (!(numberOfUnitsToSell > 0))
+                if (!(numberOfUnitsToSell >= 0))
                 {   //got bad input.
                     gotinput = false;
                     numberOfUnitsToSell = 0;
+                }
+                else if (numberOfUnitsToSell > _salesperson.WidgetItem.NumberOfUnits && numberOfUnitsToSell > 0)
+                {
+                    ConsoleUtil.DisplayPromptMessage("Are you sure you want to sell more than you have in stock creating a back order? (Y/N): ");
+                    userInput = Console.ReadLine().ToLower();
+                    if (!("y" == userInput || "yes" == userInput)) {
+                        ConsoleUtil.DisplayMessage("Sale cancelled...");
+                        ConsoleUtil.DisplayMessage("");
+                        numberOfUnitsToSell = 0;
+                        gotinput = false;
+
+                    }
                 }
             }
             return numberOfUnitsToSell;
